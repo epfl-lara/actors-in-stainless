@@ -1,0 +1,21 @@
+# Stainless
+.stainless-cache/
+*.last
+*.table
+*.log
+smt-sessions/
+tip-sessions/
+
+# sbt
+target
+/project/build
+/stainless
+/out-classes
+
+# metals
+.metals
+.bloop
+
+# Z3
+.z3-trace
+

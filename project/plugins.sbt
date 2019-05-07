@@ -3,5 +3,5 @@ resolvers += Resolver.url(
   url("https://dl.bintray.com/epfl-lara/sbt-plugins/")
 )(Resolver.ivyStylePatterns)
 
-addSbtPlugin("ch.epfl.lara" % "sbt-stainless" % "0.1.0-9a4514350534c4bacc803598230bdc8286b26385")
+addSbtPlugin("ch.epfl.lara" % "sbt-stainless" % "0.1.0-527e9e81d8c3f02ce4b579ed98ed7669209ce9e8")
 

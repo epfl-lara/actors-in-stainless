@@ -14,7 +14,7 @@ object actors {
 
   case class ActorRef(
     name: String,
-    @(extern @field)
+    @(extern @field) @(pure @field)
     underlying: akka.actor.ActorRef
   ) {
 

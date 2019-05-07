@@ -1,0 +1,1 @@
+java -jar ../stainless/frontends/stainless-scalac-standalone/target/scala-2.12/stainless-scalac-standalone-0.1.0.jar -cp ~/.ivy2/cache/com.typesafe.akka/akka-actor_2.12/jars/akka-actor_2.12-2.5.21.jar src/main/scala/Actors.scala src/main/scala/CMap.scala src/main/scala/Counter.scala src/main/scala/ReplicatedCounter.scala

@@ -2,7 +2,7 @@ import stainless.lang._
 import stainless.collection._
 import stainless.annotation._
 
-object counter {
+object Counter {
 
   import actors._
 
@@ -30,11 +30,11 @@ object counter {
     }
   }
 
-  @extern
-  def noSender = akka.actor.ActorRef.noSender
+  @extern @pure
+  val noSender = akka.actor.ActorRef.noSender
 
-  val Primary = ActorRef("primary", noSender)
-  val Backup  = ActorRef("backup", noSender)
+  def Primary = ActorRef("primary", noSender)
+  def Backup  = ActorRef("backup", noSender)
 
   case class Inc() extends Msg
 
@@ -61,6 +61,7 @@ object counter {
     }
   }
 
+  @ghost
   def validRef(ref: ActorRef) = {
     ref == Primary || ref == Backup
   }
@@ -71,5 +72,36 @@ object counter {
     val newSystem = s.step(from, to)
     invariant(newSystem)
   }.holds
+
+  @ignore
+  def main(args: Array[String]): Unit = {
+    val initCounter = Counter(0)
+
+    val system = akka.actor.ActorSystem("Counter")
+
+    val backupRef = ActorRef(
+      "backup",
+      system.actorOf(
+        akka.actor.Props(new ActorWrapper(BackBehav(initCounter))),
+        name = "backup"
+      )
+    )
+
+    val primaryRef = ActorRef(
+      "primary",
+      system.actorOf(
+        akka.actor.Props(new ActorWrapper(PrimBehav(backupRef, initCounter))),
+        name = "primary"
+      )
+    )
+
+    implicit val ctx = ActorContext(primaryRef, Nil())
+
+    import system.dispatcher
+    import scala.concurrent.duration._
+    system.scheduler.schedule(500.millis, 1000.millis) {
+      primaryRef ! Inc()
+    }
+  }
 
 }

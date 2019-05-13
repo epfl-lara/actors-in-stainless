@@ -10,7 +10,7 @@ object actors {
   abstract class Msg
 
   abstract class Behavior {
-    def processMsg(msg: Msg)(implicit ctx: ActorContext): Behavior
+    def processMsg(msg: Msg)(implicit ctx: ActorContext): Behavior = this
   }
 
   case class ActorRef(

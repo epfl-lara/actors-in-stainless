@@ -1,4 +1,5 @@
 import stainless.lang._
+import stainless.proof._
 import stainless.collection._
 import stainless.annotation._
 
@@ -33,8 +34,8 @@ object Counter {
   @extern @pure
   val noSender = akka.actor.ActorRef.noSender
 
-  def Primary = ActorRef("primary", noSender)
-  def Backup  = ActorRef("backup", noSender)
+  val Primary = ActorRef("primary", noSender)
+  val Backup  = ActorRef("backup", noSender)
 
   case class Inc() extends Msg
 
@@ -50,10 +51,10 @@ object Counter {
   def invariant(s: ActorSystem): Boolean = {
     s.inboxes(Backup -> Backup).isEmpty &&
     s.inboxes(Backup -> Primary).isEmpty &&
-    s.inboxes(Primary -> Primary).isEmpty &&
+    s.inboxes(Primary -> Primary).forall(_ == Inc()) &&
     s.inboxes(Primary -> Backup).forall(_ == Inc()) && {
       (s.behaviors(Primary), s.behaviors(Backup)) match {
-        case (PrimBehav(_, p), BackBehav(b)) =>
+        case (PrimBehav(bRef, p), BackBehav(b)) if bRef == Backup =>
           p.value == b.value + s.inboxes(Primary -> Backup).length
 
         case _ => false
@@ -61,15 +62,31 @@ object Counter {
     }
   }
 
+  @induct
+  def appendInc(msgs: List[Msg]) = {
+    require(msgs.forall(_ == Inc()))
+    (msgs :+ Inc()).forall(_ == Inc())
+  }.holds
+
   @ghost
   def validRef(ref: ActorRef) = {
     ref == Primary || ref == Backup
   }
 
   @ghost
-  def theorem(s: ActorSystem, from: ActorRef, to: ActorRef): Boolean = {
-    require(invariant(s) && validRef(from) && validRef(to))
-    val newSystem = s.step(from, to)
+  def theoremPrimary(s: ActorSystem, from: ActorRef): Boolean = {
+    require(invariant(s) && validRef(from))
+
+    val newSystem = s.step(from, Primary)
+    assert(appendInc(s.inboxes(Primary -> Backup)))
+    invariant(newSystem)
+  }.holds
+
+  @ghost
+  def theoremBackup(s: ActorSystem, from: ActorRef): Boolean = {
+    require(invariant(s) && validRef(from))
+
+    val newSystem = s.step(from, Backup)
     invariant(newSystem)
   }.holds
 

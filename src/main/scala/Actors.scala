@@ -4,6 +4,7 @@ import stainless.annotation._
 
 import scala.annotation.meta.field
 
+@library
 object actors {
 
   abstract class Msg
@@ -32,12 +33,14 @@ object actors {
 
     @inline
     def send(to: ActorRef, msg: Msg): Unit = {
-      toSend = (to, msg) :: toSend
+      ghost {
+        toSend = (to, msg) :: toSend
+      }
 
       sendUnderlying(to, msg)
     }
 
-    @extern
+    @extern @pure
     private def sendUnderlying(to: ActorRef, msg: Msg): Unit = {
       to.underlying ! msg
     }
@@ -58,8 +61,8 @@ object actors {
           val (newBehavior, toSend) = deliverMessage(to, msg)
 
           val newBehaviors = behaviors.updated(to, newBehavior)
-          val newInboxes = toSend.foldLeft(inboxes.updated(from -> to, msgs)) {
-            case (acc, (dest, m)) => acc.updated(to -> dest, m :: acc(to -> dest))
+          val newInboxes = toSend.reverse.foldLeft(inboxes.updated(from -> to, msgs)) {
+            case (acc, (dest, m)) => acc.updated(to -> dest, acc(to -> dest) :+ m)
           }
 
           ActorSystem(newBehaviors, newInboxes)

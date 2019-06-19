@@ -40,6 +40,7 @@ object KVS {
 
   case class Process(refs: List[ActorRef], mem: CMap[Variable,BigInt], appliedWrites: Set[Event], localEvents: List[Event]) extends Behavior {
     def broadcast(refs: List[ActorRef], m: Msg)(implicit ctx: ActorContext): Unit = {
+      decreases(refs.length)
       refs match {
         case Nil() => ()
         case Cons(r, rs) =>

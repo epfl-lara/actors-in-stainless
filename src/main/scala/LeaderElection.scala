@@ -11,13 +11,12 @@ object LeaderElection {
   // following https://en.wikipedia.org/wiki/Chang_and_Roberts_algorithm
 
   case class Initialize(next: ActorRef, uid: BigInt) extends Msg
-  case class Election(i: BigInt) extends Msg
+  case object StartElection extends Msg
+  case class Election(@ghost startingActor: ActorRef, i: BigInt) extends Msg
+  // startingActor is used only in proofs
   case class Elected(i: BigInt) extends Msg
 
   def max(x: BigInt, y: BigInt) = if (x > y) x else y
-
-  @extern @pure
-  val noSender = akka.actor.ActorRef.noSender
 
   case class Uninitialized() extends Behavior {
     override def processMsg(msg: Msg)(implicit ctx: ActorContext) = {
@@ -32,8 +31,12 @@ object LeaderElection {
   case class NonParticipant(next: ActorRef, uid: BigInt) extends Behavior {
     override def processMsg(msg: Msg)(implicit ctx: ActorContext) = {
       msg match {
-        case Election(uid2) if (uid2 != uid) =>
-          next ! Election(max(uid, uid2))
+        case StartElection =>
+          next ! Election(ctx.self, uid)
+          Participant(next, uid)
+
+        case Election(startingActor, uid2) =>
+          next ! Election(startingActor, max(uid, uid2))
           Participant(next, uid)
 
         case _ => this
@@ -46,15 +49,15 @@ object LeaderElection {
       msg match {
         case Elected(leader) =>
           next ! Elected(leader)
-          KnowLeader(leader)
+          KnowLeader(next, leader, uid)
 
-        case Election(uid2) =>
+        case Election(startingActor, uid2) =>
           if (uid == uid2) {
             // I'm the leader!!
             next ! Elected(uid)
-            KnowLeader(uid)
+            KnowLeader(next, uid, uid)
           } else if (uid2 > uid) {
-            next ! Election(uid2)
+            next ! Election(startingActor, uid2)
             this
           } else {
             // discard smaller uid Election message
@@ -66,10 +69,14 @@ object LeaderElection {
     }
   }
 
-  case class KnowLeader(leader: BigInt) extends Behavior
+  case class KnowLeader(next: ActorRef, leader: BigInt, uid: BigInt) extends Behavior
 
   @ignore
   def main(args: Array[String]): Unit = {
+    if (args.length != 1) {
+      println("Usage: run NUMBER_OF_PARTICIPANTS")
+      System.exit(1)
+    }
     val participants = args(0).toInt
     val system = akka.actor.ActorSystem("LeaderElection")
 
@@ -99,6 +106,6 @@ object LeaderElection {
 
     // And we start an election by sending a message to the first actor
     implicit val ctx = ActorContext(actorRefs(1), Nil())
-    actorRefs(1) ! Election(0)
+    actorRefs(1) ! StartElection
   }
 }

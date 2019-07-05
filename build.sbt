@@ -29,7 +29,7 @@ lazy val actorsProjectSettings = Seq(
 ) ++ noPublishSettings
 
 lazy val `counter` = project
-  .in(file("counter"))
+  .in(file("examples/counter"))
   .enablePlugins(StainlessPlugin)
   .settings(commonSettings, actorsProjectSettings)
   .settings(
@@ -38,7 +38,7 @@ lazy val `counter` = project
   )
 
 lazy val `leader-election` = project
-  .in(file("leader-election"))
+  .in(file("examples/leader-election"))
   .enablePlugins(StainlessPlugin)
   .settings(commonSettings, actorsProjectSettings)
   .settings(
@@ -47,7 +47,7 @@ lazy val `leader-election` = project
   )
 
 // lazy val `replicated-counter` = project
-//   .in(file("replicated-counter"))
+//   .in(file("examples/replicated-counter"))
 //   .enablePlugins(StainlessPlugin)
 //   .settings(commonSettings, actorsProjectSettings)
 //   .settings(
@@ -55,7 +55,7 @@ lazy val `leader-election` = project
 //     Compile / mainClass := Some("ReplicatedCounter"),
 //   )
 
-// lazy val `kvs` = (project in file("."))
+// lazy val `kvs` = (project in file("examples/kvs"))
 //   .enablePlugins(StainlessPlugin)
 //   .settings(commonSettings, actorsProjectSettings)
 //   .settings(

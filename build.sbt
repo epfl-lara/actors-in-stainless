@@ -1,57 +1,65 @@
+ThisBuild / version      := "0.1.0"
+ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / organization := "ch.epfl.lara"
 
-// lazy val `counter` = (project in file("."))
-//   .enablePlugins(StainlessPlugin)
-//   .settings(
-//     name         := "stainless-actors-counter",
-//     version      := "0.1.0",
-//     scalaVersion := "2.12.8",
+lazy val commonSettings = Seq(
+  libraryDependencies ++= Seq(
+    "com.typesafe.akka" %% "akka-actor" % "2.5.21",
+  ),
+)
 
-//     Compile/mainClass := Some("Counter"),
+lazy val noPublishSettings = Seq(
+  skip in publish := true,
+  publish         := {},
+  publishM2       := {},
+  publishLocal    := {},
+)
 
-//     libraryDependencies ++= Seq(
-//       "com.typesafe.akka" %% "akka-actor" % "2.5.21",
-//     ),
-//   )
-
-lazy val `leaderElection` = (project in file("."))
-  // .enablePlugins(StainlessPlugin)
+lazy val `actors` = project
+  .in(file("."))
+  .enablePlugins(StainlessPlugin)
   .settings(
-    name         := "stainless-actors-leader-election",
-    version      := "0.1.0",
-    scalaVersion := "2.12.8",
-
-    Compile/mainClass := Some("LeaderElection"),
-
-    libraryDependencies ++= Seq(
-      "com.typesafe.akka" %% "akka-actor" % "2.5.21",
-    ),
+    name := "stainless-actors",
+    commonSettings,
   )
+
+
+lazy val actorsProjectSettings = Seq(
+  Compile / unmanagedSources ++= (actors / Compile / unmanagedSources).value,
+) ++ noPublishSettings
+
+lazy val `counter` = project
+  .in(file("counter"))
+  .enablePlugins(StainlessPlugin)
+  .settings(commonSettings, actorsProjectSettings)
+  .settings(
+    name := "stainless-actors-counter",
+    Compile / mainClass := Some("Counter"),
+  )
+
+lazy val `leader-election` = project
+  .in(file("leader-election"))
+  .enablePlugins(StainlessPlugin)
+  .settings(commonSettings, actorsProjectSettings)
+  .settings(
+    name := "stainless-actors-leader-election",
+    Compile / mainClass := Some("LeaderElection"),
+  )
+
+// lazy val `replicated-counter` = project
+//   .in(file("replicated-counter"))
+//   .enablePlugins(StainlessPlugin)
+//   .settings(commonSettings, actorsProjectSettings)
+//   .settings(
+//     name := "stainless-actors-counter3",
+//     Compile / mainClass := Some("ReplicatedCounter"),
+//   )
 
 // lazy val `kvs` = (project in file("."))
 //   .enablePlugins(StainlessPlugin)
+//   .settings(commonSettings, actorsProjectSettings)
 //   .settings(
-//     name         := "stainless-actors-kvs",
-//     version      := "0.1.0",
-//     scalaVersion := "2.12.8",
-
-//     Compile/mainClass := Some("KVS"),
-
-//     libraryDependencies ++= Seq(
-//       "com.typesafe.akka" %% "akka-actor" % "2.5.21",
-//     ),
-//   )
-
-// lazy val `counter2` = (project in file("."))
-//   .enablePlugins(StainlessPlugin)
-//   .settings(
-//     name         := "stainless-actors-counter3",
-//     version      := "0.1.0",
-//     scalaVersion := "2.12.8",
-
-//     Compile/mainClass := Some("ReplicatedCounter"),
-
-//     libraryDependencies ++= Seq(
-//       "com.typesafe.akka" %% "akka-actor" % "2.5.21",
-//     ),
+//     name := "stainless-actors-kvs",
+//     Compile / mainClass := Some("KVS"),
 //   )
 

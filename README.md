@@ -10,8 +10,8 @@ Our model is loosely based on the modern definition of object-based actor system
 
 In this framework, each actor is addressed by a reference, through which other actors can asynchronously send messages. Each actor has an associated behavior, which holds the state of the actor, if any, and determines
 
-a) the operations which will be performed upon receiving a message
-b) what is the next behavior to associate with its reference
+- the operations which will be performed upon receiving a message
+- what is the next behavior to associate with its reference
 
 A behavior can thus be seen as a data type holding some immutable values representing the state, and a method which takes in a message, performs some computation which might involve sending messages to other actors, and finally returns a new behavior.
 

@@ -65,8 +65,8 @@ object Counter {
   @induct
   def appendInc(msgs: List[Msg]) = {
     require(msgs.forall(_ == Inc()))
-    (msgs :+ Inc()).forall(_ == Inc())
-  }.holds
+    ()
+  } ensuring(_ => (msgs :+ Inc()).forall(_ == Inc()))
 
   @ghost
   def validRef(ref: ActorRef) = {
@@ -78,7 +78,7 @@ object Counter {
     require(invariant(s) && validRef(from))
 
     val newSystem = s.step(from, Primary)
-    assert(appendInc(s.inboxes(Primary -> Backup)))
+    appendInc(s.inboxes(Primary -> Backup))
     invariant(newSystem)
   }.holds
 

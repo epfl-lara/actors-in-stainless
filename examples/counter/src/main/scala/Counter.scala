@@ -62,7 +62,7 @@ object Counter {
     }
   }
 
-  @induct
+  @induct @ghost
   def appendInc(msgs: List[Msg]) = {
     require(msgs.forall(_ == Inc()))
     ()

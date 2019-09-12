@@ -2,10 +2,9 @@
 resolvers ++= Seq(
   Resolver.bintrayIvyRepo("epfl-lara", "sbt-plugins"),
   Resolver.bintrayRepo("epfl-lara", "princess"),
-  "uuverifiers" at "http://logicrunch.research.it.uu.se/maven",
 )
 
-val StainlessVersion = "0.3.2"
+val StainlessVersion = "0.5.0"
 
 addSbtPlugin("ch.epfl.lara" % "sbt-stainless" % StainlessVersion)
 

@@ -1,6 +1,9 @@
 ThisBuild / version      := "0.1.0"
 ThisBuild / scalaVersion := "2.12.9"
 ThisBuild / organization := "ch.epfl.lara"
+ThisBuild / licenses     := Seq(
+  "Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0.html")
+)
 
 lazy val commonSettings = Seq(
   libraryDependencies ++= Seq(
@@ -9,6 +12,11 @@ lazy val commonSettings = Seq(
     "ch.qos.logback" % "logback-classic" % "1.2.3",
   ),
   fork := true,
+)
+
+lazy val publishSettings = Seq(
+  bintrayOrganization := Some("epfl-lara"),
+  bintrayRepository   := "maven",
 )
 
 lazy val noPublishSettings = Seq(
@@ -24,8 +32,8 @@ lazy val `actors` = project
   .settings(
     name := "stainless-actors",
     commonSettings,
+    publishSettings,
   )
-
 
 lazy val actorsProjectSettings = Seq(
   Compile / unmanagedSources ++= (actors / Compile / unmanagedSources).value,

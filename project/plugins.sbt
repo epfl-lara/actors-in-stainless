@@ -8,3 +8,4 @@ val StainlessVersion = "0.6.0"
 
 addSbtPlugin("ch.epfl.lara" % "sbt-stainless" % StainlessVersion)
 
+addSbtPlugin("org.foundweekends" % "sbt-bintray" % "0.5.3")

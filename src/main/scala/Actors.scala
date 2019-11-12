@@ -4,15 +4,17 @@ import stainless.annotation._
 
 import scala.annotation.meta.field
 
-@library
 object actors {
 
+  @library
   abstract class Msg
 
+  @library
   abstract class Behavior {
     def processMsg(msg: Msg)(implicit ctx: ActorContext): Behavior = this
   }
 
+  @library
   case class ActorRef(
     name: String,
     @(extern @field) @(pure @field)
@@ -25,6 +27,7 @@ object actors {
     }
   }
 
+  @library
   case class ActorContext(
     self: ActorRef,
     @ghost
@@ -46,7 +49,7 @@ object actors {
     }
   }
 
-  @ghost
+  @ghost @library
   case class ActorSystem(
     behaviors: CMap[ActorRef, Behavior],
     inboxes: CMap[(ActorRef, ActorRef), List[Msg]]

@@ -1,4 +1,4 @@
-ThisBuild / version      := "0.1.0"
+ThisBuild / version      := "0.1.1"
 ThisBuild / scalaVersion := "2.12.9"
 ThisBuild / organization := "ch.epfl.lara"
 ThisBuild / licenses     := Seq(

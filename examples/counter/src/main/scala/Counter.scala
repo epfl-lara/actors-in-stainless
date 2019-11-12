@@ -10,32 +10,32 @@ object Counter {
   case class PrimBehav(backup: ActorRef, counter: Counter) extends Behavior {
     require(backup.name == "backup")
 
-    override
-    def processMsg(msg: Msg)(implicit ctx: ActorContext): Behavior = msg match {
-      case Inc() =>
-        backup ! Inc()
-        PrimBehav(backup, counter.increment)
+    override def processMsg(msg: Msg)(implicit ctx: ActorContext): Behavior =
+      msg match {
+        case Inc() =>
+          backup ! Inc()
+          PrimBehav(backup, counter.increment)
 
-      case _ => this
-    }
+        case _ => this
+      }
   }
 
   case class BackBehav(counter: Counter) extends Behavior {
 
-    override
-    def processMsg(msg: Msg)(implicit ctx: ActorContext): Behavior = msg match {
-      case Inc() =>
-        BackBehav(counter.increment)
+    override def processMsg(msg: Msg)(implicit ctx: ActorContext): Behavior =
+      msg match {
+        case Inc() =>
+          BackBehav(counter.increment)
 
-      case _ => this
-    }
+        case _ => this
+      }
   }
 
   @extern @pure
   val noSender = akka.actor.ActorRef.noSender
 
   val Primary = ActorRef("primary", noSender)
-  val Backup  = ActorRef("backup", noSender)
+  val Backup = ActorRef("backup", noSender)
 
   case class Inc() extends Msg
 
@@ -66,7 +66,7 @@ object Counter {
   def appendInc(msgs: List[Msg]) = {
     require(msgs.forall(_ == Inc()))
     ()
-  } ensuring(_ => (msgs :+ Inc()).forall(_ == Inc()))
+  } ensuring (_ => (msgs :+ Inc()).forall(_ == Inc()))
 
   @ghost
   def validRef(ref: ActorRef) = {

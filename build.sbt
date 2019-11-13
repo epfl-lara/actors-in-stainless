@@ -57,12 +57,12 @@ lazy val `leader-election` = project
     Compile / mainClass := Some("LeaderElection"),
   )
 
-// lazy val `kvs` = project
-//   .in(file("examples/kvs"))
-//   .enablePlugins(StainlessPlugin)
-//   .settings(commonSettings, actorsProjectSettings)
-//   .settings(
-//     name := "stainless-actors-kvs",
-//     Compile / mainClass := Some("KVS"),
-//   )
+lazy val `kvs` = project
+  .in(file("examples/kvs"))
+  .enablePlugins(StainlessPlugin)
+  .settings(commonSettings, actorsProjectSettings)
+  .settings(
+    name := "stainless-actors-kvs",
+    Compile / mainClass := Some("KVS"),
+  )
 

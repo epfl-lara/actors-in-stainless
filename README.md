@@ -1,5 +1,5 @@
 
-# stainless-actors [![Build Status](http://laraquad4.epfl.ch:9000/epfl-lara/stainless-actors/status/master)](http://laraquad4.epfl.ch:9000/epfl-lara/stainless-actors/builds)
+# Stainless Actors [![Release][release-img]][latest-release] [![Build Status][larabot-img]][larabot-ref] [![Gitter chat][gitter-img]][gitter-ref] [![Apache 2.0 License][license-img]][license-ref]
 
 > Actor System library for Stainless which runs on Akka.
 
@@ -286,3 +286,13 @@ License
 -------
 
 This project is licensed under the terms of the [Apache 2.0 license](LICENSE).
+
+[latest-release]: https://github.com/epfl-lara/stainless-actors/releases/latest
+[license-img]: https://img.shields.io/badge/license-Apache_2.0-blue.svg?color=134EA2
+[license-ref]: https://github.com/epfl-lara/stainless-actors/blob/master/LICENSE
+[gitter-img]: https://img.shields.io/gitter/room/gitterHQ/gitter.svg?color=ed1965
+[gitter-ref]: https://gitter.im/epfl-lara/stainless
+[larabot-img]: http://laraquad4.epfl.ch:9000/epfl-lara/stainless-actors/status/master
+[larabot-ref]: http://laraquad4.epfl.ch:9000/epfl-lara/stainless-actors/builds
+[release-img]: https://img.shields.io/github/release-pre/epfl-lara/stainless-actors.svg
+[tag-date-img]: https://img.shields.io/github/release-date-pre/epfl-lara/stainless-actors.svg?style=popout

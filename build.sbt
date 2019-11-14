@@ -1,17 +1,16 @@
-ThisBuild / version      := "0.1.1"
-ThisBuild / scalaVersion := "2.12.9"
-ThisBuild / organization := "ch.epfl.lara"
-ThisBuild / licenses     := Seq(
-  "Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0.html")
-)
 
 lazy val commonSettings = Seq(
+  scalaVersion := "2.12.9",
+  organization := "ch.epfl.lara",
   libraryDependencies ++= Seq(
     "com.typesafe.akka" %% "akka-actor" % "2.5.21",
     "com.typesafe.akka" %% "akka-slf4j" % "2.5.21",
     "ch.qos.logback" % "logback-classic" % "1.2.3",
   ),
   fork := true,
+  licenses := Seq(
+    "Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0.html")
+  ),
 )
 
 lazy val publishSettings = Seq(
@@ -28,9 +27,10 @@ lazy val noPublishSettings = Seq(
 
 lazy val `actors` = project
   .in(file("."))
-  .enablePlugins(StainlessPlugin)
+  .enablePlugins(StainlessPlugin, GitVersioning)
   .settings(
     name := "stainless-actors",
+    git.useGitDescribe := true,
     commonSettings,
     publishSettings,
   )

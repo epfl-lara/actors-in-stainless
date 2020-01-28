@@ -156,8 +156,9 @@ object LeaderElectionInvariant {
       )
   }
 
-  // returns the index of the greater UID between from and to, and its UID
+  /** Returns the index of the greater UID between from and to, and its UID */
   @ghost
+  @library // Needed because DecreasesProcessor changes the measure to an invalid one
   def partialMaxUID(
     behaviors: CMap[ActorRef, Behavior],
     refs: List[ActorRef],

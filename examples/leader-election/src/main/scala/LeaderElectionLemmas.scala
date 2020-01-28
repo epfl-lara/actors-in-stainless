@@ -88,7 +88,7 @@ object LeaderElectionLemmas {
     ()
   } ensuring(_ => increment(j, n) == i)
 
-  @opaque @ghost
+  @opaque @ghost @library
   def partialMaxGreater(
     behaviors: CMap[ActorRef, Behavior],
     refs: List[ActorRef],
@@ -159,7 +159,7 @@ object LeaderElectionLemmas {
     maxUID(behaviors, refs) == maxUID(behaviors.updated(r,b), refs)
   }
 
-  @opaque @ghost
+  @opaque @ghost @library
   def samePartialUID(
     behaviors: CMap[ActorRef, Behavior],
     refs: List[ActorRef],

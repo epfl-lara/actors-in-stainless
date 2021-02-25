@@ -1,6 +1,5 @@
-
 lazy val commonSettings = Seq(
-  scalaVersion := "2.12.9",
+  scalaVersion := "2.12.13",
   organization := "ch.epfl.lara",
   libraryDependencies ++= Seq(
     "com.typesafe.akka" %% "akka-actor" % "2.5.21",

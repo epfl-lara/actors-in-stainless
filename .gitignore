@@ -19,3 +19,5 @@ target
 # Z3
 .z3-trace
 
+# VS Code
+.vscode

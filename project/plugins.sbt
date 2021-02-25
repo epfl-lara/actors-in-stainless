@@ -4,7 +4,7 @@ resolvers ++= Seq(
   Resolver.bintrayRepo("epfl-lara", "princess"),
 )
 
-val StainlessVersion = "0.6.2"
+val StainlessVersion = "0.8.0"
 
 addSbtPlugin("ch.epfl.lara" % "sbt-stainless" % StainlessVersion)
 
